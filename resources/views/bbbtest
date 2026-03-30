@@ -1,0 +1,1702 @@
+#ess1 { text-decoration: none; color: black; } #ess1:hover { text-decoration:
+none; background-color: rgb(8, 8, 8); color: white; } .bg-orange {
+background-color: rgb(176, 117, 68); } .bg-blue { background-color: #4b0ed9 }
+.bg-indigo { background-color: #14363b } .carousel-item img { object-fit: cover;
+width: 100%; height: 100%; } .navbar-collapse .navbar-nav .nav-item {
+margin-right: 2rem !important; /* Espace entre les éléments de la navbar */ }
+.navbar-collapse .navbar-nav .nav-link { color: white !important; /* Couleur
+blanche pour les liens de la navbar */ } .carousel-image { height: 500px; /*
+Définissez la hauteur souhaitée */ object-fit: cover; /* Permet de conserver les
+proportions de l'image tout en remplissant l'espace */ } .custom-font {
+font-family: 'Roboto', sans-serif; /* Appliquer la police uniquement à cet
+élément */ } .brand-grid .brand-item { border: 1px solid #faf8f8;
+background-color: #dbe2ea; /* Fond légèrement gris */ padding: 20px; margin:
+10px; border-radius: 5px; /* Coins arrondis */ transition: transform 0.2s; }
+.brand-grid .brand-item:hover { transform: scale(1.05); /* Effet de zoom au
+survol */ } .brand-grid img { max-width: 100px; max-height: 50px; } /* General
+Styles */ .container-fluid { padding-top: 5rem; } .section-title { font-size:
+1.5rem; margin-bottom: 2rem; } /* General Styles */ .container-fluid {
+padding-top: 5rem; } .section-title { font-size: 2rem; margin-bottom: 2rem; } /*
+Card Styles */ .product-item { transition: transform 0.3s, box-shadow 0.3s;
+width: 27vh; } .product-item:hover { transform: translateY(-5px); box-shadow: 0
+4px 15px rgba(0, 0, 0, 0.2); } /* Product Image Styles */ .product-img {
+position: relative; } .product-img img { height: 14rem; object-fit: cover; } /*
+Overlay Styles */ .overlay { position: absolute; top: 0; left: 0; right: 0;
+bottom: 0; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center;
+justify-content: center; opacity: 0; transition: opacity 0.3s; border-radius:
+8px 8px 0 0; } .product-img:hover .overlay { opacity: 1; } .overlay .text {
+color: white; font-size: 1.5rem; font-weight: bold; } html, body { margin: 0;
+padding: 0; overflow-x: hidden; width: 100%; height: 100%; /* S'assure que le
+body prend toute la hauteur */ box-sizing: border-box; /* Ensure consistent
+box-sizing */ } .row { display: flex; flex-wrap: wrap; justify-content: center;
+} .nav-center { display: flex; justify-content: center; } .product-item { flex:
+0 0 calc(33.33% - 1rem); /* Three products per row for tablet */ } .main-content
+{ flex: 1; /* Prend tout l'espace restant */ display: flex; justify-content:
+center; /* Centre horizontalement */ align-items: center; /* Centre
+verticalement, si nécessaire */ flex-direction: column; /* Pour un layout en
+colonne */ padding-left: 80px; /* Ajuste cette valeur pour augmenter l'espace à
+gauche */ padding-right: 80px; /* Ajuste cette valeur pour augmenter l'espace à
+droite */ } .product>div { display: flex; flex-wrap: wrap; /* Pour permettre le
+passage à la ligne des produits */ justify-content: center; /* Centre les
+produits horizontalement */ } .add-to-cart-container { transition: transform
+0.3s ease, color 0.3s ease; } .add-to-cart-container:hover .add-to-cart-btn {
+transform: translateY(-10px); color: #ff0000; /* Changer la couleur lors du
+survol */ }
+
+<div class="d-none d-md-block">
+    <div class="row col-md-12 mt-4">
+        <!-- Conteneur principal avec "row" -->
+
+        <!-- Bloc "Nos Rayons" -->
+        <div class="col-md-2 mb-0">
+            <div class="card mt-1">
+                <div class="card-body col-md-12">
+                    <div class="row overflow-auto" id="rayon">
+                        <span><b>Nos Rayons</b></span>
+                        @if(isset($souscategoriescat) &&
+                        count($souscategoriescat) > 0)
+                        <!-- Display souscategoriescat if it's available (for
+
+                        function) -->
+                        @foreach($souscategoriescat as $souscateg)
+                        <a
+                            href="/produitsubcate/{{$souscateg->id}}/{{$souscateg->nomsubCat}}"
+                            id="ess1"
+                            >{{$souscateg->nomsubCat}}</a
+                        >
+                        @endforeach @elseif(isset($souscategories1) &&
+                        count($souscategories1) > 0)
+                        <!-- Display souscategories1 if souscategoriescat is not available (for main function) -->
+                        @foreach($souscategories1 as $souscateg)
+                        <a
+                            href="/produitcate/{{$souscateg->id}}/{{$souscateg->nomCat}}"
+                            id="ess1"
+                            >{{$souscateg->nomCat}}</a
+                        >
+                        @endforeach @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bloc "Carousel" -->
+        <div class="col-md-8">
+            <div
+                id="carouselExampleControls1b1"
+                class="carousel slide"
+                data-bs-ride="carousel"
+                data-bs-interval="3000"
+            >
+                <div class="carousel-inner">
+                    @foreach ($publicites as $index => $pub)
+                    <div
+                        class="carousel-item {{ $index === 0 ? 'active' : '' }}"
+                    >
+                        <div class="">
+                            <img
+                                class="d-block w-100"
+                                src="{{ asset('photos/' . $pub->nom) }}"
+                                alt=""
+                                style="object-fit: contain; height: 400px"
+                            />
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                <button
+                    class="carousel-control-prev"
+                    type="button"
+                    data-bs-target="#carouselExampleControls1b1"
+                    data-bs-slide="prev"
+                >
+                    <span
+                        class="carousel-control-prev-icon"
+                        aria-hidden="true"
+                    ></span>
+                    <span class="visually-hidden">Précédent</span>
+                </button>
+                <button
+                    class="carousel-control-next"
+                    type="button"
+                    data-bs-target="#carouselExampleControls1b1"
+                    data-bs-slide="next"
+                >
+                    <span
+                        class="carousel-control-next-icon"
+                        aria-hidden="true"
+                    ></span>
+                    <span class="visually-hidden">Suivant</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Bloc Image et Heures d'Ouverture -->
+        <div class="col-md-2">
+            <div class="row d-none d-lg-block">
+                <img
+                    class="img-fluid"
+                    style="height: 200px; width: 250px; border-radius: 30px"
+                    src="{{ asset('photos/ecom6.jpg') }}"
+                    alt="image"
+                />
+            </div>
+
+            <div class="row mt-2">
+                <div
+                    class="card border-0 shadow-sm bg-danger fs-5 text-white opacity-95"
+                >
+                    <span>Heures d'ouverture</span>
+                    <span>Lun - Ven : 8h30 - 18h</span>
+                    <samp>Sam : 8h30 - 13h</samp>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #rayon {
+        height: 20vh;
+        overflow-y: auto;
+    }
+
+    .rayon span,
+    .rayon a {
+        font-size: 15px;
+        /* Réduit la taille du texte */
+    }
+</style>
+
+<!-- Contenu pour petit écran -->
+<div class="d-block d-md-none">
+    <div class="row mt-1">
+        <!-- Conteneur principal avec "row" -->
+        <!-- Bloc "Nos Rayons" -->
+        <div class="col-sm-12 mb-2">
+            <!-- Réduit l'espace horizontal avec px-1 -->
+            <div class="card mt-1">
+                <div class="card-body">
+                    <div class="row overflow-auto" id="rayon">
+                        <span><b>Nos Rayons</b></span>
+                        @foreach ($souscategories1 as $souscateg)
+                        <a
+                            href="/produitcate/{{ $souscateg->id }}"
+                            id="ess1"
+                            >{{ $souscateg->nomCat }}</a
+                        >
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{--
+        <div
+            id="carouselExampleIndicators"
+            class="carousel slide"
+            data-bs-ride="carousel"
+            data-bs-interval="3000"
+        >
+            <!-- Carrousel avec les images -->
+            <div class="carousel-inner">
+                @foreach ($publicites as $index => $pub)
+                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                    <a href="/detailprod/{{ $pub->produit_id }}">
+                        <img
+                            class="d-block w-100"
+                            src="{{ asset('photos/' . $pub->nom) }}"
+                        />
+                    </a>
+                </div>
+                @endforeach
+            </div>
+            <!-- Boutons de navigation (Précédent / Suivant) -->
+            <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev"
+            >
+                <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Précédent</span>
+            </button>
+            <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next"
+            >
+                <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Suivant</span>
+            </button>
+        </div>
+        --}}
+
+        <div class="row">
+            <div
+                id="carouselExampleIndicators"
+                class="carousel slide"
+                data-bs-ride="carousel"
+                data-bs-interval="3000"
+            >
+                <!-- Indicateurs de pagination -->
+                <div class="carousel-indicators">
+                    @foreach ($publicites as $index => $pub)
+                    <button
+                        type="button"
+                        data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide-to="{{ $index }}"
+                        class="{{ $index === 0 ? 'active' : '' }}"
+                        aria-current="{{ $index === 0 ? 'true' : 'false' }}"
+                        aria-label="Slide {{ $index + 1 }}"
+                    ></button>
+                    @endforeach
+                </div>
+
+                <!-- Carrousel avec les images -->
+                <div class="carousel-inner">
+                    @foreach ($publicites as $index => $pub)
+                    <div
+                        class="carousel-item {{ $index === 0 ? 'active' : '' }}"
+                    >
+                        <a href="/detailprod/{{ $pub->produit_id }}">
+                            <img
+                                class="d-block w-100"
+                                src="{{ asset('photos/' . $pub->nom) }}"
+                                alt="..."
+                                style="object-fit: contain"
+                            />
+                        </a>
+                    </div>
+                    @endforeach
+                </div>
+
+                <!-- Boutons de navigation (Précédent / Suivant) -->
+                <button
+                    class="carousel-control-prev"
+                    type="button"
+                    data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="prev"
+                >
+                    <span
+                        class="carousel-control-prev-icon"
+                        aria-hidden="true"
+                    ></span>
+                    <span class="visually-hidden">Précédent</span>
+                </button>
+                <button
+                    class="carousel-control-next"
+                    type="button"
+                    data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="next"
+                >
+                    <span
+                        class="carousel-control-next-icon"
+                        aria-hidden="true"
+                    ></span>
+                    <span class="visually-hidden">Suivant</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Bloc Image et Heures d'Ouverture -->
+        <div class="col-md-12 mt">
+            <div class="row mt-1">
+                <div
+                    class="card border-0 shadow-sm bg-danger fs-5 text-white opacity-95"
+                    style="width: 80%"
+                >
+                    <span>Heures d'ouverture</span>
+                    <span>Lun - Ven : 8h30 - 18h</span>
+                    <samp>Sam : 8h30 - 13h</samp>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #rayon {
+        height: 20vh;
+        overflow-y: auto;
+    }
+
+    .rayon span,
+    .rayon a {
+        font-size: 15px;
+        /* Réduit la taille du texte */
+    }
+</style>
+
+html, body { margin: 0; padding: 0; width: 100%; box-sizing: border-box;
+min-height: 200vh; /* Ensure there is enough scrollable content */ /* Ensure
+consistent box-sizing */ } .header { background-color: #ca8f30; /* Couleur
+principale */ color: black; padding: 10px 0; position: sticky; top: 0; z-index:
+1000; } .header .search-bar { max-width: 800px; width: 100%; } .header
+.search-bar input { border-radius: 50px 0 0 50px; border: none; padding: 10px; }
+.header .search-bar button { border-radius: 0 50px 50px 0; border: none; }
+.header .navbar-brand { font-weight: bold; } .header .icon-link { display: flex;
+flex-direction: column; align-items: center; text-align: center; color: black;
+border: none; background: transparent; padding: 10px; } .header .icon-link i {
+font-size: 1.5rem; /* Taille de l'icône */ margin-bottom: 5px; } .header
+.right-menu { display: flex; align-items: center; gap: 20px; } .header
+.secondary-menu { background-color: white; /* Couleur secondaire */ color:
+black; padding: 10px 0; } .header .secondary-menu input[type="button"] {
+background-color: transparent; border: none; color: black; padding: 10px 15px;
+margin: 0 5px; border-radius: 50px; } .header .secondary-menu
+input[type="button"].active { background-color: #ca8f30; /* Couleur de fond
+lorsqu'on clique */ color: white; } .header .secondary-menu
+input[type="button"]:focus { outline: none; } /* Styles pour la barre latérale
+*/ .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0;
+left: 0; background-color: #fff; color: #000; overflow-x: hidden; transition:
+0.5s; padding-top: 60px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); } .sidebar a
+{ padding: 10px 15px; text-decoration: none; font-size: 1.25em; color: #000;
+display: block; transition: 0.3s; } .sidebar a:hover { background-color:
+#d9d9e1; } .sidebar .closebtn { position: absolute; top: 0; right: 25px;
+font-size: 36px; margin-left: 50px; color: #ca8f30; } .openbtn { font-size:
+20px; cursor: pointer; background-color: white; color: black; padding: 10px
+15px; border: none; } .openbtn.active { background-color: #ca8f30; color: white;
+} .text-decoration-none { text-decoration: none; } .custom-h1 { font-size: 2rem;
+/* Taille du texte */ color: #fff; /* Couleur du texte */ } /* Sidebar container
+*/ .menu-item { padding: 10px 20px; color: white; text-decoration: none;
+display: block; } .menu-item:hover { background-color: #ca8f30; cursor: pointer;
+} /* Submenu styling */ .submenus { position: relative; } .submenu { display:
+none; position: absolute; left: 250px; /* Align next to the sidebar */ top: 0;
+width: 300px; background-color:#ca8f30; color: white; padding: 20px; border: 1px
+solid #ccc; } .submenu.show { display: block; } #searchResultsContainer {
+position: absolute; background: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+width: 100%; max-height: 400px; overflow-y: auto; border-radius: 8px; z-index:
+1000; } .result-item { display: flex; align-items: center; padding: 10px;
+border-bottom: 1px solid #f0f0f0; } .result-item:last-child { border-bottom:
+none; } .result-left img { width: 60px; height: 60px; object-fit: cover;
+border-radius: 8px; } .result-right { margin-left: 10px; } .result-title {
+font-size: 16px; font-weight: bold; margin: 0; color: #546364; }
+.result-description { font-size: 14px; margin: 5px 0; color: #666; }
+.result-price { color: #28a745; font-weight: bold; } .result-price-old {
+text-decoration: line-through; color: #999; margin-left: 5px; } .midium-above {
+display: block; } /* .lvl1{ background-color: blue; } .lvl2{ background-color:
+green; padding: 1rem; } .lvl3{ background-color: brown; } */ /* Default behavior
+for larger screens (desktop) */ .search-container { display: block; width: 100%;
+} /* Adjust the search container for mobile screens */ @media (max-width: 768px)
+{ .search-container { display: block; width: 100%; } .result-image { width:
+100px; /* smaller image on mobile */ height: auto; } .midium-above { display:
+none; } #searchResultsContainer { display: block !important; } } /* For smaller
+screen mobile versions, you can hide or modify how images appear */ @media
+(max-width: 480px) { .result-image { width: 50px; /* even smaller image */
+height: auto; } } @media (max-width: 768px) { } html, body { margin: 0; padding:
+0; width: 100%; box-sizing: border-box; min-height: 200vh; /* Ensure there is
+enough scrollable content */ /* Ensure consistent box-sizing */ } .header {
+background-color: #ca8f30; /* Couleur principale */ color: black; padding: 10px
+0; position: sticky; top: 0; z-index: 1000; } .header .search-bar { max-width:
+800px; width: 100%; } .header .search-bar input { border-radius: 50px 0 0 50px;
+border: none; padding: 10px; } .header .search-bar button { border-radius: 0
+50px 50px 0; border: none; } .header .navbar-brand { font-weight: bold; }
+.header .icon-link { display: flex; flex-direction: column; align-items: center;
+text-align: center; color: black; border: none; background: transparent;
+padding: 10px; } .header .icon-link i { font-size: 1.5rem; /* Taille de l'icône
+*/ margin-bottom: 5px; } .header .right-menu { display: flex; align-items:
+center; gap: 20px; } .header .secondary-menu { background-color: white; /*
+Couleur secondaire */ color: black; padding: 10px 0; display: none; } .header
+.secondary-menu input[type="button"] { background-color: transparent; border:
+none; color: black; padding: 10px 15px; margin: 0 5px; border-radius: 50px; }
+.header .secondary-menu input[type="button"].active { background-color: #ca8f30;
+/* Couleur de fond lorsqu'on clique */ color: white; } .header .secondary-menu
+input[type="button"]:focus { outline: none; } /* Styles pour la barre latérale
+*/ .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0;
+left: 0; background-color: #fff; color: #000; overflow-x: hidden; transition:
+0.5s; padding-top: 60px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); } .sidebar a
+{ padding: 10px 15px; text-decoration: none; font-size: 1.25em; color: #000;
+display: block; transition: 0.3s; } .sidebar a:hover { background-color:
+#d9d9e1; } .sidebar .closebtn { position: absolute; top: 0; right: 25px;
+font-size: 36px; margin-left: 50px; color: #ca8f30; } .openbtn { font-size:
+20px; cursor: pointer; background-color: white; color: black; padding: 10px
+15px; border: none; } .openbtn.active { background-color: #ca8f30; color: white;
+} .text-decoration-none { text-decoration: none; } .custom-h1 { font-size: 2rem;
+/* Taille du texte */ color: #fff; /* Couleur du texte */ } /* Sidebar container
+*/ .menu-item { padding: 10px 20px; color: white; text-decoration: none;
+display: block; } .menu-item:hover { background-color: #ca8f30; cursor: pointer;
+} /* Submenu styling */ .submenus { position: relative; } .submenu { display:
+none; position: absolute; left: 250px; /* Align next to the sidebar */ top: 0;
+width: 300px; background-color:#ca8f30; color: white; padding: 20px; border: 1px
+solid #ccc; } .submenu.show { display: block; } #searchResultsContainer {
+position: absolute; background: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+width: 100%; max-height: 400px; overflow-y: auto; border-radius: 8px; z-index:
+1000; } .result-item { display: flex; align-items: center; padding: 10px;
+border-bottom: 1px solid #f0f0f0; } .result-item:last-child { border-bottom:
+none; } .result-left img { width: 60px; height: 60px; object-fit: cover;
+border-radius: 8px; } .result-right { margin-left: 10px; } .result-title {
+font-size: 16px; font-weight: bold; margin: 0; color: #546364; }
+.result-description { font-size: 14px; margin: 5px 0; color: #666; }
+.result-price { color: #28a745; font-weight: bold; } .result-price-old {
+text-decoration: line-through; color: #999; margin-left: 5px; } /* .lvl1{
+background-color: blue; } .lvl2{ background-color: green; padding: 1rem; }
+.lvl3{ background-color: brown; } */ /* Default behavior for larger screens
+(desktop) */ .search-container { display: block; width: 100%; } /* Adjust the
+search container for mobile screens */ @media (max-width: 768px) {
+.search-container { display: block; width: 100%; } .result-image { width: 100px;
+/* smaller image on mobile */ height: auto; } .header .secondary-menu { display:
+none; } #searchResultsContainer { display: block !important; } } /* For smaller
+screen mobile versions, you can hide or modify how images appear */ @media
+(max-width: 480px) { .result-image { width: 50px; /* even smaller image */
+height: auto; } .header .secondary-menu { display: none; } } @media (max-width:
+768px) { }
+
+<!-- heade,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,r -->
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title></title>
+        <link rel="stylesheet" href="../" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+            crossorigin="anonymous"
+        />
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"
+        ></script>
+        <!-- Styles -->
+
+        <style>
+            /* General Styles */
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                box-sizing: border-box;
+                min-height: 100vh; /* Ensure there is enough scrollable content */
+                overflow-x: hidden;
+            }
+
+            /* Header Styles */
+            .header {
+                background-color: #343a40;
+                color: white;
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+                width: 100%;
+            }
+
+            /* Logo & Shop Name */
+            .custom-h1 {
+                font-size: 24px;
+                font-weight: bold;
+            }
+
+            .ittext {
+                background-color: #dc3545; /* Red */
+                padding: 5px 10px;
+                border-radius: 5px;
+            }
+            .header .icon-link {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                color: black;
+                border: none;
+                background: transparent;
+                padding: 10px;
+            }
+
+            .header .icon-link i {
+                font-size: 1.5rem;
+                /* Taille de l'icône */
+                margin-bottom: 5px;
+            }
+
+            .header .right-menu {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .header .secondary-menu {
+                background-color: white;
+                /* Couleur secondaire */
+                color: black;
+                padding: 10px 0;
+                display: none;
+            }
+
+            .header .secondary-menu input[type="button"] {
+                background-color: transparent;
+                border: none;
+                color: black;
+                padding: 10px 15px;
+                margin: 0 5px;
+            }
+
+            .header .secondary-menu input[type="button"].active {
+                background-color: #dc3545;
+                /* Couleur de fond lorsqu'on clique */
+                color: white;
+            }
+
+            .header .secondary-menu input[type="button"]:focus {
+                outline: none;
+            }
+
+            /* Search Bar */
+            .search-container {
+                width: 100%;
+                max-width: 600px;
+                position: relative;
+            }
+
+            .search-bar {
+                width: 100%;
+                display: flex;
+            }
+
+            .search-bar input {
+                flex-grow: 1;
+                border: 1px solid #ddd;
+                border-right: none;
+                padding: 8px;
+                border-radius: 5px 0 0 5px;
+            }
+
+            .search-bar button {
+                border: none;
+                background-color: #dc3545;
+                color: white;
+                padding: 8px 15px;
+                border-radius: 0 5px 5px 0;
+            }
+
+            .search-bar button:hover {
+                background-color: #b52a38;
+            }
+
+            /* Search Results */
+            #searchResultsContainer {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                border: 1px solid #ddd;
+                z-index: 10;
+                display: none;
+            }
+
+            /* Right Menu (Login, Cart, Logout) */
+            .right-menu {
+                display: flex;
+                align-items: center;
+            }
+
+            #searchResultsContainer {
+                position: absolute;
+                background: white;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                max-height: 400px;
+                overflow-y: auto;
+                border-radius: 8px;
+                z-index: 1000;
+            }
+
+            .result-item {
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .result-item:last-child {
+                border-bottom: none;
+            }
+
+            .result-left img {
+                width: 60px;
+                height: 60px;
+                object-fit: cover;
+                border-radius: 8px;
+            }
+
+            .result-right {
+                margin-left: 10px;
+            }
+
+            .result-title {
+                font-size: 16px;
+                font-weight: bold;
+                margin: 0;
+                color: #546364;
+            }
+
+            .result-description {
+                font-size: 14px;
+                margin: 5px 0;
+                color: #666;
+            }
+
+            .result-price {
+                color: #28a745;
+                font-weight: bold;
+            }
+
+            .result-price-old {
+                text-decoration: line-through;
+                color: #999;
+                margin-left: 5px;
+            }
+
+            .icon-link {
+                color: white;
+                display: flex;
+                align-items: center;
+            }
+
+            .icon-link i {
+                margin-right: 5px;
+            }
+
+            .acart {
+                margin-left: 15px;
+            }
+
+            /* Cart Button */
+            .acart .btn {
+                background: transparent;
+                border: none;
+            }
+
+            .acart .badge {
+                font-size: 12px;
+            }
+
+            /* Logout Button */
+            .logout-btn {
+                color: white;
+                text-decoration: none;
+                font-size: 16px;
+            }
+
+            /* Secondary Menu (Appears on Large Screens) */
+            .secondary-menu {
+                background-color: #212529;
+                padding: 10px;
+                border-radius: 5px;
+            }
+
+            .secondary-menu .nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .secondary-menu .openbtn {
+                background-color: #dc3545;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                margin: 5px;
+                border-radius: 5px;
+            }
+
+            .secondary-menu .openbtn a {
+                color: white;
+                text-decoration: none;
+            }
+
+            /* Styles pour la barre latérale */
+            .sidebar {
+                height: 100%;
+                width: 0;
+                position: fixed;
+                z-index: 1000;
+                top: 0;
+                left: 0;
+                background-color: #fff;
+                color: #000;
+                overflow-x: hidden;
+                transition: 0.5s;
+                padding-top: 60px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .sidebar a {
+                padding: 10px 15px;
+                text-decoration: none;
+                font-size: 1.25em;
+                color: #000;
+                display: block;
+                transition: 0.3s;
+            }
+
+            .sidebar a:hover {
+                background-color: #d9d9e1;
+            }
+
+            .sidebar .closebtn {
+                position: absolute;
+                top: 0;
+                right: 25px;
+                font-size: 36px;
+                margin-left: 50px;
+                color: #343a40;
+            }
+
+            /* Responsive Design */
+            @media (max-width: 991px) {
+                /* Hide secondary menu on smaller screens */
+                .secondary-menu {
+                    display: none !important;
+                }
+            }
+
+            @media (max-width: 767px) {
+                /* Adjustments for mobile */
+                .search-bar {
+                    flex-direction: column;
+                }
+
+                .search-bar input {
+                    border-radius: 5px;
+                    margin-bottom: 5px;
+                }
+
+                .search-bar button {
+                    border-radius: 5px;
+                    width: 100%;
+                }
+
+                .right-menu {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+
+                .acart {
+                    margin-left: 0;
+                    margin-top: 10px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-logo">
+                    <a href="index.html">
+                        <img
+                            src="./public/lovable-uploads/logo.png"
+                            alt="2NCORPORATE SARL Logo"
+                        />
+                    </a>
+                </div>
+
+                <div class="navbar-search desktop-only">
+                    <div class="search-container">
+                        <input
+                            type="text"
+                            placeholder="Rechercher des produits..."
+                        />
+                        <button class="search-button">
+                            <svg
+                                width="18"
+                                height="18"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="navbar-links desktop-only">
+                    <a href="index.html" class="nav-link active">Accueil</a>
+                    <a href="produits.html" class="nav-link">Produits</a>
+                    <a href="about.html" class="nav-link">À propos</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </div>
+
+                <div class="navbar-buttons">
+                    <button class="icon-button cart-button">
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M2 2H4L4.73 5M4.73 5H21L17 14H6L4.73 5Z"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                            <path
+                                d="M7 18C7 17.4477 7.44772 17 8 17C8.55228 17 9 17.4477 9 18C9 18.5523 8.55228 19 8 19C7.44772 19 7 18.5523 7 18Z"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+                            <path
+                                d="M15 18C15 17.4477 15.4477 17 16 17C16.5523 17 17 17.4477 17 18C17 18.5523 16.5523 19 16 19C15.4477 19 15 18.5523 15 18Z"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+                        </svg>
+                        <span class="cart-count">0</span>
+                    </button>
+
+                    <button class="icon-button user-button desktop-only">
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                            <path
+                                d="M16 21V19C16 16.7909 14.2091 15 12 15H8C5.79086 15 4 16.7909 4 19V21"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </button>
+
+                    <button class="menu-toggle mobile-only" id="menuToggle">
+                        <svg
+                            class="menu-icon"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M3 12H21M3 6H21M3 18H21"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <svg
+                            class="close-icon"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M18 6L6 18M6 6L18 18"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menu mobile -->
+            <div class="mobile-menu" id="mobileMenu">
+                <div class="mobile-search">
+                    <input
+                        type="text"
+                        placeholder="Rechercher des produits..."
+                    />
+                    <button class="search-button">
+                        <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </button>
+                </div>
+                <div class="mobile-links">
+                    <a href="index.html" class="mobile-link">Accueil</a>
+                    <a href="produits.html" class="mobile-link">Produits</a>
+                    <a href="about.html" class="mobile-link">À propos</a>
+                    <a href="contact.html" class="mobile-link">Contact</a>
+                    <a href="#" class="mobile-link user-link">
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                            <path
+                                d="M16 21V19C16 16.7909 14.2091 15 12 15H8C5.79086 15 4 16.7909 4 19V21"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        Mon compte
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <!-- Header Section -->
+        <header class="header">
+            <div class="container-fluid py-3 lvl1">
+                <div
+                    class="row align-items-center justify-content-between lvl2"
+                >
+                    <div
+                        class="col-auto mb-2 d-flex justify-content-between align-items-center w-100 divshop"
+                    >
+                        <!-- Shop Name -->
+                        <a
+                            href="/maincontain"
+                            id="TOPOFPAGE"
+                            class="text-decoration-none nshop"
+                        >
+                            <h1
+                                class="m-0 custom-h1 d-inline-block white-space-nowrap"
+                            >
+                                <span
+                                    class="text-white font-weight-bold border px-3 mr-1 ittext me-3 fs-6"
+                                    >2NSHOP</span
+                                >
+                            </h1>
+                        </a>
+
+                        <!-- User Profile / Cart Section -->
+                        <div class="d-flex align-items-center">
+                            @guest
+                            <div
+                                class="col-auto mb-2 d-flex justify-content-between align-items-center w-100 divshop"
+                            >
+                                <a
+                                    href="{{ route('login') }}"
+                                    class="icon-link text-decoration-none me-2 fs-6 fs-md-5 fs-lg-4"
+                                >
+                                    <i class="bi bi-person icon-margin"></i>
+                                    Connecter
+                                </a>
+                                <a
+                                    href="{{ route('signin') }}"
+                                    class="icon-link text-decoration-none me-2 fs-6 fs-md-5 fs-lg-4"
+                                >
+                                    <i class="bi bi-person"></i> S'inscrire
+                                </a>
+
+                                <!-- Cart Button -->
+                                <div class="text-right acart">
+                                    <a
+                                        href="/cardshopping"
+                                        class="btn position-relative text-decoration-none icon-link me-2 fs-6 fs-md-5 fs-lg-4"
+                                    >
+                                        <i
+                                            class="fas fa-shopping-cart text-white fs-5 fs-md-4 fs-lg-3"
+                                        ></i>
+                                        <span
+                                            id="nouv"
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                        >
+                                            {{ count(session()->get('cart', [])) }}
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                            @endguest @auth
+                            <div
+                                class="col-auto mb-2 d-flex justify-content-between align-items-center w-100 divshop"
+                            >
+                                <a
+                                    href="@if (Auth::user()->statut == 'admin') {{
+                                        route('admin')
+                                    }} @elseif (Auth::user()->statut == 'secretaire') {{
+                                        route('secretaire')
+                                    }} @endif"
+                                    class="icon-link text-decoration-none me-3 fs-6 fs-md-5 fs-lg-4"
+                                >
+                                    <i
+                                        class="fa fa-user text-white fs-5 fs-md-4 fs-lg-3"
+                                    ></i>
+                                    {{ \Illuminate\Support\Facades\Auth::user()->name }}
+                                </a>
+
+                                <!-- Cart Button -->
+                                <div class="text-right me-3">
+                                    <a
+                                        href="/cardshopping"
+                                        class="btn position-relative text-decoration-none icon-link me-2 fs-6 fs-md-5 fs-lg-4"
+                                    >
+                                        <i
+                                            class="fas fa-shopping-cart text-white fs-5 fs-md-4 fs-lg-3"
+                                        ></i>
+                                        <span
+                                            id="nouv"
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                        >
+                                            {{ count(session()->get('cart', [])) }}
+                                        </span>
+                                    </a>
+                                </div>
+
+                                <!-- Logout Button -->
+                                <form
+                                    action="{{ route('logout') }}"
+                                    method="post"
+                                    class="m-0"
+                                >
+                                    @method('delete') @csrf
+                                    <button
+                                        type="submit"
+                                        class="btn text-white text-decoration-none p-0 border-0 icon-link me-2 fs-6 fs-md-5 fs-lg-4"
+                                    >
+                                        <i
+                                            class="fas fa-sign-out-alt fs-5 fs-md-4 fs-lg-3"
+                                        ></i>
+                                        Logout
+                                    </button>
+                                </form>
+                            </div>
+                            @endauth
+                        </div>
+                    </div>
+
+                    <!-- Search Section -->
+                    <div class="col-12 col-md-6 col-lg-5 mb-0 divsearch">
+                        <div class="search-container">
+                            <form
+                                class="d-flex search-bar mx-auto"
+                                onsubmit="return false;"
+                            >
+                                <input
+                                    class="form-control"
+                                    type="search"
+                                    id="searchInput"
+                                    placeholder="Qu'est-ce qui vous ferait plaisir ?"
+                                    aria-label="Search"
+                                    onkeyup="searchProducts()"
+                                />
+                                <button
+                                    class="btn btn-danger"
+                                    type="button"
+                                    onclick="searchProducts()"
+                                >
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </form>
+                            <div
+                                id="searchResultsContainer"
+                                style="display: none"
+                            >
+                                <div id="searchResults"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Profile / Cart Section -->
+                    <!-- <div class="col-auto rlogos">
+                <div class="col-auto">
+                    @guest
+                    <div class="right-menu">
+                        <a href="{{ route('login') }}" class="icon-link" style="all: none; text-decoration: none;">
+                            <i class="bi bi-person icon-margin"></i> Connecter
+                        </a>
+                        <a href="{{ route('signin') }}" class="icon-link ms-4" style="text-decoration: none;">
+                            <i class="bi bi-person"></i> S'inscrire
+                        </a>
+
+                        <div class="col-lg-1 col-2 text-right acart">
+                            <a href="/cardshopping" class="btn position-relative" style="text-decoration: none;">
+                                <i class="fas fa-shopping-cart" style="color:white;"></i>
+                                <span id="nouv" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ count(session()->get('cart', [])) }}
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                    @endguest
+
+                    @auth
+                    <div class="right-menu d-flex">
+                        <a href="@if (Auth::user()->statut == 'admin') {{ route('admin') }} @elseif (Auth::user()->statut == 'secretaire') {{ route('secretaire') }} @endif"
+                            class="icon-link" style="text-decoration: none;">
+                            <i class="fa fa-user" style="color:white; font-size: 1.5rem;"></i>
+                            {{ \Illuminate\Support\Facades\Auth::user()->name }}
+                        </a>
+
+                        <div class="col-lg-1 col-1 text-right">
+                            <a href="/cardshopping" class="btn position-relative" style="text-decoration: none;">
+                                <i class="fas fa-shopping-cart" style="color:white; font-size: 1.5rem;"></i>
+                                <span id="nouv" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ count(session()->get('cart', [])) }}
+                                </span>
+                            </a>
+                        </div>
+
+                        <div class="col-lg-1 col-1 text-right ms-5">
+                            <form action="{{ route('logout') }}" method="post">
+                                @method('delete')
+                                @csrf
+                                <a href="{{ route('logout') }}" style="text-decoration: none;">
+                                    <i class="fas fa-sign-out-alt" style="color:white; font-size: 1.5rem;"></i>
+                                    <span class="d-lg-block">
+                                        <button type="submit" style="all: unset;"><i style="color:white">Logout</i></button>
+                                    </span>
+                                </a>
+                            </form>
+                        </div>
+                    </div>
+                    @endauth
+                </div>
+            </div> -->
+                </div>
+
+                <!-- Secondary Menu (Responsive Navigation) -->
+                <div
+                    class="justify-content-center mt-3 secondary-menu d-none d-lg-flex"
+                >
+                    <nav class="nav">
+                        <button
+                            class="openbtn"
+                            id="rayonsButton"
+                            onclick="toggleSidebar()"
+                        >
+                            <i class="bi bi-list"></i> Tous nos rayons
+                        </button>
+                        <button class="openbtn">
+                            <a href="/maincontain"
+                                ><input
+                                    type="button"
+                                    value="Accueil"
+                                    class="btn"
+                                    onclick="activateMenuItem(this)"
+                            /></a>
+                        </button>
+
+                        @if (@isset($souscategories)) @foreach ($souscategories
+                        as $souscat)
+                        <button class="openbtn">
+                            <a
+                                href="/produitcate/{{ $souscat->id }}/{{ $souscat->nomCat }}"
+                                ><input
+                                    type="button"
+                                    value="{{ $souscat->nomCat }}"
+                                    class="btn"
+                                    onclick="activateMenuItem(this)"
+                            /></a>
+                        </button>
+                        @endforeach @endif
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <div id="mySidebar" class="sidebar">
+            <a
+                href="#"
+                style="background-color: #343a40; color: white"
+                class="w-100"
+                >&ensp;Nos Categories</a
+            >
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+                >×</a
+            >
+            @foreach ($souscategories1 as $category)
+            <a
+                href="/produitcate/{{ $category->id }}/{{ $category->nomCat }}"
+                class="menu-item"
+                data-target="submenu{{ $category->id }}"
+            >
+                <i class="bi bi-camera-video"></i>&ensp;{{ $category->nomCat }}
+            </a>
+            @endforeach
+            <!-- <a href="#"><i class="bi bi-camera-video"></i>&ensp;Promo</a>
+        <a href="#"><i class="bi bi-camera-video"></i>&ensp;Câble et conducteur</a>
+        <a href="#"><i class="bi bi-lightbulb"></i> &ensp;Luminaire</a>
+        {{-- <a href="#"><i class="bi bi-tools"></i>&ensp;Outillage</a>
+    <a href="#"><i class="bi bi-camera-video"></i>&ensp;Automatisme-Gestion de l'energie</a>
+    <a href="#"><i class="bi bi-camera-video"></i>&ensp;Ascenseur-Monte-Charge</a>
+    <a href="#"><i class="bi bi-camera-video"></i>&ensp;Vidéo surveillance</a>
+    <a href="#"><i class="bi bi-camera-video"></i>&ensp;Carrelage</a> --}}
+        <a href="#"><i class="bi bi-camera-video"></i>&ensp;Appareil électroménager</a>
+        <a href="#"><i class="bi bi-laptop"></i>&ensp;Matériels informatique</a>
+        <a href="#"><i class="bi bi-phone"></i>&ensp;Téléphonie</a> -->
+        </div>
+        <!-- <div class="submenus">
+    @foreach ($souscategories as $category)
+<div id="submenu{{ $category->id }}" class="submenu">
+        <p>Details about {{ $category->nomCat }} category.</p>
+    </div>
+@endforeach
+</div> -->
+        <script>
+            document.querySelectorAll(".menu-item").forEach((item) => {
+                item.addEventListener("mouseenter", function () {
+                    const target = this.getAttribute("data-target");
+                    document.querySelectorAll(".submenu").forEach((submenu) => {
+                        submenu.classList.remove("show");
+                    });
+                    document.getElementById(target).classList.add("show");
+                });
+
+                item.addEventListener("mouseleave", function () {
+                    const target = this.getAttribute("data-target");
+                    setTimeout(() => {
+                        document
+                            .getElementById(target)
+                            .classList.remove("show");
+                    }, 300); // Optional delay for smoother UX
+                });
+            });
+        </script>
+        <script>
+            function activateMenuItem(element) {
+                // Désactiver tous les autres éléments de menu
+                let items = document.querySelectorAll(
+                    '.secondary-menu input[type="button"], .right-menu .icon-link, .secondary-menu .openbtn'
+                );
+                items.forEach((item) => item.classList.remove("active"));
+
+                // Activer l'élément cliqué
+                element.classList.add("active");
+
+                // Fermer la barre latérale si elle est ouverte
+                closeNav();
+            }
+
+            function toggleSidebar() {
+                const sidebar = document.getElementById("mySidebar");
+                const button = document.getElementById("rayonsButton");
+
+                // Désactiver tous les autres boutons du menu
+                let items = document.querySelectorAll(
+                    '.secondary-menu input[type="button"], .right-menu .icon-link, .secondary-menu .openbtn'
+                );
+                items.forEach((item) => item.classList.remove("active"));
+
+                if (sidebar.style.width === "300px") {
+                    sidebar.style.width = "0";
+                    button.classList.remove("active");
+                } else {
+                    sidebar.style.width = "300px";
+                    button.classList.add("active");
+                }
+            }
+
+            function closeNav() {
+                document.getElementById("mySidebar").style.width = "0";
+                document
+                    .getElementById("rayonsButton")
+                    .classList.remove("active");
+            }
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script>
+            function searchProducts() {
+                console.log("Searching products...");
+                const query = document.getElementById("searchInput").value;
+
+                // Avoid making a request for empty input
+                if (query.length < 1) {
+                    document.getElementById("searchResults").innerHTML = ""; // Clear results
+                    document.getElementById(
+                        "searchResultsContainer"
+                    ).style.display = "none"; // Hide results container
+                    return;
+                }
+
+                // Show search results container
+                document.getElementById(
+                    "searchResultsContainer"
+                ).style.display = "block";
+
+                // Send AJAX request to the server
+                fetch(`/search-products?query=${encodeURIComponent(query)}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        let resultsHtml = "";
+
+                        if (data.length > 0) {
+                            data.forEach((product) => {
+                                let imageHtml = product.images[0]?.nom
+                                    ? `<img class="result-image" src="/photos/${product.images[0].nom}" alt="${product.libelle}" />`
+                                    : `<img class="result-image" src="/default-placeholder.png" alt="No Image" />`;
+
+                                resultsHtml += `<a href="/detailprod/${
+                                    product.id
+                                }">
+                    <div class="result-item">
+                        <div class="result-left">
+                            ${imageHtml}
+                        </div>
+                        <div class="result-right">
+                            <h3 class="result-title">${product.libelle}</h3>
+                            <p>
+                                <strong class="result-price">${
+                                    product.prix
+                                } FCFA</strong>
+                                ${
+                                    product.prixbonetat
+                                        ? `<span class="result-price-old">${product.prixbonetat} FCFA</span>`
+                                        : ""
+                                }
+                            </p>
+                        </div>
+                    </div></a>`;
+                            });
+
+                            // Show results container
+                            document.getElementById(
+                                "searchResultsContainer"
+                            ).style.display = "block";
+                        } else {
+                            resultsHtml = "<p>No products found.</p>";
+                            document.getElementById(
+                                "searchResultsContainer"
+                            ).style.display = "block";
+                        }
+
+                        // Update the results container
+                        document.getElementById("searchResults").innerHTML =
+                            resultsHtml;
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching search results:", error);
+                    });
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const searchInput = document.getElementById("searchInput");
+                const searchResultsContainer = document.getElementById(
+                    "searchResultsContainer"
+                );
+                const searchResults = document.getElementById("searchResults");
+
+                // Show search results dynamically
+                searchInput.addEventListener("input", function () {
+                    if (this.value.trim() !== "") {
+                        searchResultsContainer.style.display = "block";
+                    } else {
+                        searchResultsContainer.style.display = "none";
+                    }
+                });
+                // Show search results dynamically
+                searchInput.addEventListener("touchstart", function () {
+                    if (this.value.trim() !== "") {
+                        searchResultsContainer.style.display = "block";
+                    } else {
+                        searchResultsContainer.style.display = "none";
+                    }
+                });
+
+                // Close search results when clicking outside
+                document.addEventListener("click", function (event) {
+                    if (
+                        !searchResults.contains(event.target) &&
+                        !searchInput.contains(event.target)
+                    ) {
+                        searchResultsContainer.style.display = "none";
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const searchInput = document.getElementById("searchInput");
+                const searchResults = document.getElementById("searchResults");
+
+                // Show search results dynamically
+                searchInput.addEventListener("input", function () {
+                    if (this.value.trim() !== "") {
+                        searchResults.parentElement.style.display = "block";
+                        // You can add AJAX logic to fetch results based on input value.
+                    } else {
+                        searchResults.parentElement.style.display = "none";
+                    }
+                });
+
+                // Close search results when clicking outside
+                document.addEventListener("click", function (event) {
+                    if (
+                        !searchResults.contains(event.target) &&
+                        !searchInput.contains(event.target)
+                    ) {
+                        searchResults.parentElement.style.display = "none";
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- guestcontan css -->
+
+/* Responsive Product Grid */
+.product .col-6 {
+    flex: 0 0 50%; /* 2 products per row on mobile */
+    max-width: 50%;
+}
+    /* Card Styles */
+    .product-item {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Product Image Styles */
+
+.product-img img {
+    height: 14rem;
+    object-fit: contain;
+
+}
+/* Product Image Styles */
+.product-img {
+position: relative;
+height: 14rem; /* Keep uniform height */
+overflow: hidden; /* Hide overflow if image exceeds container */
+}
+
+
+
+/* Overlay Styles */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: 8px 8px 0 0;
+}
+
+.product-img:hover .overlay {
+    opacity: 1;
+}
+
+.overlay .text {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.brand-grid .brand-item {
+    border: 1px solid #faf8f8;
+    background-color: #dbe2ea;
+    /* Fond légèrement gris */
+    padding: 20px;
+    margin: 10px;
+    border-radius: 5px;
+    /* Coins arrondis */
+    transition: transform 0.2s;
+}
+
+.brand-grid .brand-item:hover {
+    transform: scale(1.05);
+    /* Effet de zoom au survol */
+}
+
+.brand-grid img {
+    max-width: 100px;
+    max-height: 50px;
+}
+#ess1 {
+    text-decoration: none;
+    color: black;
+}
+
+#ess1:hover {
+    text-decoration: none;
+    background-color: rgb(8, 8, 8);
+    color: white;
+}
+.carousel-item img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+/* Initial state of images: off-screen */
+.slide-up {
+    transform: translateY(100%);
+    animation: slideUp 1s forwards;
+}
+
+.slide-down {
+    transform: translateY(-100%);
+    animation: slideDown 1s forwards;
+}
+
+/* Animation for sliding the image from the top */
+@keyframes slideUp {
+    0% {
+        transform: translateY(100%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Animation for sliding the image from the bottom */
+@keyframes slideDown {
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Grid Fix */
+@media (max-width: 576px) {
+    .product .col-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (min-width: 576px) {
+    .product .col-sm-4 {
+        flex: 0 0 33.33%;
+        max-width: 33.33%;
+    }
+}
+
+@media (min-width: 768px) {
+    .product .col-md-3 {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .product .col-lg-2 {
+        flex: 0 0 16.66%;
+        max-width: 16.66%;
+    }
+}
+
+#rayon {
+    height: 20vh;
+    overflow-y: auto;
+}
+
+.rayon span,
+.rayon a {
+    font-size: 15px;
+    /* Réduit la taille du texte */
+}
+/* Ensure the carousel has a responsive height and takes full width */
+#carouselExampleIndicators,
+#carouselExampleControls1b1 {
+    width: 100%; /* Ensure full width */
+    object-fit: cover;
+}
+
+@media (max-width: 767px) {
+    #carouselExampleIndicators .carousel-inner,
+    #carouselExampleControls1b1 .carousel-inner {
+        height: 250px; /* Adjust for smaller screens */
+    }
+    #carouselExampleIndicators .carousel-inner,
+    #carouselExampleControls1b2 .carousel-inner {
+        height: 250px; /* Adjust for smaller screens */
+    }
+}
+
+@media (min-width: 768px) {
+    #carouselExampleControls1b1 .carousel-inner {
+        height: 400px; /* Default height for larger screens */
+    }
+    #carouselExampleControls1b2 .carousel-inner {
+        height: 400px; /* Default height for larger screens */
+    }
+}
+
+
+</style>

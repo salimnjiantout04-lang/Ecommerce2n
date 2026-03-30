@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /login
+Disallow: /register
+Disallow: /password/
+Disallow: /storage/
+Disallow: /vendor/
+
+# Sitemap
+Sitemap: https://www.2n-shop.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 10

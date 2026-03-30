@@ -1,0 +1,919 @@
+<div id="targetDiv" class="mt-4">
+    <button class="btn btn-primary btn-toggle-products btn-md rounded-pill" 
+            id="scrollButton" data-id="history">
+        Historique de transactions <i class="fas fa-eye ms-2"></i>
+    </button>
+</div>
+
+<div class="product-row" data-id="history" id="targetTable">
+    <div class="col-sm-9 ms-5 ps-5 d-flex ms-5 ps-9" id="julio">
+        <div class="card ms-5 ps-5" style="border-style: none;">
+            <div class="card-body ms-5 ps-5">
+                <table id="table2" class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Transactio Id</th>
+                            <th>Etat</th>
+                            <th>Date d'achat</th>
+                            <th>Visibilite</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($auteur as $item)
+                            <tr>
+                                <td>T00{{ $item['id'] }}</td>
+                                <td>{{ $item['etat'] }}</td>
+                                <td>{{ $item['created_at'] }}</td>
+                                <td>
+                                    <button class="btn btn-toggle-products" data-id="{{ $item['id'] }}">voir
+                                        <i class="fas fa-eye ms-2" style="color:green"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="product-row" data-id="{{ $item['id'] }}">
+                                <td colspan="6">
+                                    <table class="table table-sm" style="background-color:azure">
+                                        <thead>
+                                            <tr>
+                                                <th>Produit</th>
+                                                <th>Prix</th>
+                                                <th>Quantité</th>
+                                                <th>Etat</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php $val = 0; @endphp
+                                            @foreach ($item->commandenvs as $com)
+                                                <tr>
+                                                    <td>{{ $com->produit->libelle }}</td>
+                                                    <td>{{ $com->prix }}</td>
+                                                    <td>{{ $com->qtte }}</td>
+                                                    <td>{{ $com->etat }}</td>
+                                                    <td>{{ $com->prix * $com->qtte }}</td>
+                                                </tr>
+                                                @php $val += $com->prix * $com->qtte; @endphp
+                                            @endforeach
+                                            <tr>
+                                                <strong>
+                                                    <td colspan="3" class="text-end">Total</td>
+                                                    <td>{{ $val }}</td>
+                                                </strong>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Cibler le bouton et la section du tableau
+        const scrollButton = document.getElementById('scrollButton');
+        const targetTable = document.getElementById('targetTable');
+
+        if (scrollButton && targetTable) {
+            scrollButton.addEventListener('click', function () {
+                // Effectuer un défilement fluide vers la section cible
+                targetTable.scrollIntoView({
+                    behavior: 'smooth', // Défilement fluide
+                    block: 'start'      // Aligner le haut du tableau avec le haut de la fenêtre
+                });
+            });
+        }
+
+        // Après le défilement, ouvrir la description automatiquement
+        setTimeout(function () {
+            var toggleButton = document.querySelector('.toggle-description');
+            var content = document.querySelector('.description-content');
+
+            // Si la description est masquée, l'afficher
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block'; // Afficher la description
+                toggleButton.innerHTML = '<i class="fas fa-chevron-up"></i>'; // Flèche vers le haut
+            }
+        }, 500); // Attendre 500ms après le défilement pour garantir que la section est arrivée en vue
+    });
+
+    // Code pour gérer l'ouverture/fermeture de la description via la flèche
+    document.addEventListener('DOMContentLoaded', function () {
+        var toggleButton = document.querySelector('.toggle-description');
+        if (toggleButton) {
+            toggleButton.addEventListener('click', function () {
+                var content = document.querySelector('.description-content');
+
+                // Si la description est masquée, on l'affiche
+                if (content.style.display === 'none' || content.style.display === '') {
+                    content.style.display = 'block';
+                    this.innerHTML = '<i class="fas fa-chevron-up"></i>'; // Flèche vers le haut
+                } else {
+                    // Sinon, on la cache
+                    content.style.display = 'none';
+                    this.innerHTML = '<i class="fas fa-chevron-down"></i>'; // Flèche vers le bas
+                }
+
+                // Ajouter ou supprimer la classe "active" pour changer la direction de la flèche
+                this.classList.toggle('active');
+            });
+        }
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+<!-- ROUTES................................................ -->
+<?php
+
+use App\Models\Produit;
+use App\Models\Categorie;
+use App\Models\Localisation;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\usercontroller;
+use App\Http\Controllers\achatcontroller;
+
+use App\Http\Controllers\produitcontroller;
+
+
+use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\LocalisationController;
+use App\Http\Controllers\notificationcontroller;
+use App\Http\Controllers\SousCategorieController;
+use App\Http\Controllers\CaracteristiqueController;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+Route::get('/Utilisateur',[usercontroller::class, 'FormUser'])->name('Utilisateur');
+Route::post('/AddUtilisateur',[usercontroller::class, 'createutilisateur'])->name('AddUtilisateur');
+Route::get('/ListUtilisateur',[usercontroller::class, 'Liste'])->name('ListUtilisateur');
+Route::get('/supprimeruser/{id}',[usercontroller::class, 'supprimeruser'])->name('supprimeruser');
+Route::get('/admin', function () {
+    return view('admin');
+})->name('admin');    // Autres routes admin
+
+
+Route::group(['middleware' => 'admin'], function() {
+//routes pour la categorie   
+Route::get('/Categorie',[CategorieController::class, 'FormCategorie'])->name('Categorie');
+Route::post('/AddCategorie',[CategorieController::class, 'AddCategorie'])->name('AddCategorie');
+Route::get('/ListeCategorie',[CategorieController::class, 'Liste'])->name('ListeCategorie');
+Route::get('/SupprimerCategorie/{id}',[CategorieController::class, 'Supprimer'])->name('SupprimerCategorie');
+Route::get('/ModifierCategorie/{id}',[CategorieController::class, 'Modifier'])->name('ModifierCategorie');
+Route::post('/UpdateCategorie',[CategorieController::class, 'Update'])->name('UpdateCategorie');
+
+
+//routes pour la sous categorie
+Route::get('/SousCategorie',[SousCategorieController::class, 'FormSousCategorie'])->name('SousCategorie');
+Route::post('/AddSousCategorie',[SousCategorieController::class, 'AddSousCategorie'])->name('AddSousCategorie');
+Route::get('/ListeSousCategorie',[SousCategorieController::class, 'Liste'])->name('ListeSousCategorie');
+Route::get('/SupprimerSousCategorie/{id}',[SousCategorieController::class, 'Supprimer'])->name('SupprimerSousCategorie');
+Route::get('/ModifierSousCategorie/{id}',[SousCategorieController::class, 'Modifier'])->name('ModifierSousCategorie');
+Route::post('/UpdateSousCategorie',[SousCategorieController::class, 'Update'])->name('UpdateSousCategorie');
+Route::get('/selectcategorie', [SousCategorieController::class, 'selectcategorie'])->name('selectcategorie');
+
+
+
+// Appel des routes pour la caracteristique
+Route::get('/Caracteristique',[CaracteristiqueController::class, 'FormCaracteristique'])->name('Caracteristique');
+Route::post('/AddCaracteristique',[CaracteristiqueController::class, 'AddCaracteristique'])->name('AddCaracteristique');
+Route::get('/ListCaracteristique',[CaracteristiqueController::class, 'Liste'])->name('ListCaracteristique');
+Route::get('/SupprimerCaracteristique/{id}',[CaracteristiqueController::class, 'Supprimer'])->name('SupprimerCaracteristique');
+Route::get('/ModifierCaracteristique/{id}',[CaracteristiqueController::class, 'Modifier'])->name('ModifierCaracteristique');
+Route::post('/UpdateCaracteristique',[CaracteristiqueController::class, 'Update'])->name('UpdateCaracteristique');
+
+// Appel des routes pour la Localisation
+Route::get('/Localisation',[LocalisationController::class, 'FormLocalisation'])->name('Localisation');
+Route::post('/AddLocalisation',[LocalisationController::class, 'AddLocalisation'])->name('AddLocalisation');
+Route::get('/ListLocalisation',[LocalisationController::class, 'Liste'])->name('ListLocalisation');
+Route::get('/SupprimerLocalisation/{id}',[LocalisationController::class, 'Supprimer'])->name('SupprimerLocalisation');
+Route::get('/ModifierLocalisation/{id}',[LocalisationController::class, 'Modifier'])->name('ModifierLocalisation');
+Route::post('/UpdateLocalisation',[LocalisationController::class, 'Update'])->name('UpdateLocalisation');
+
+// Appel des routes pour les utilisateurs
+
+Route::get('/formproduct', [produitcontroller::class, 'formproduct'])->name('formproduct');
+Route::get('/CreateInfoProduit', [produitcontroller::class, 'createinfo'])->name('CreateInfoProduit');
+Route::post('/AddProduit',[produitController::class, 'AddProduit'])->name('AddProduit');
+Route::get('/searchprodupd/{id}', [produitcontroller::class, 'searchprodupd'])->name('searchprodupd');
+Route::post('/modproduit',[produitController::class, 'modproduit'])->name('modproduit');
+Route::get('/SupprimerProduit/{id}',[produitcontroller::class, 'SupprimerProduit'])->name('SupprimerProduit');
+
+
+});
+
+
+
+Route::get('/secretaire', function () {
+    return view('secretaire');
+})->name('secretaire');
+
+
+// Appel des routes pour la categorie
+
+
+
+Route::delete('/logout', [usercontroller::class, 'logout'])->name('logout');
+Route::get('/logout', [usercontroller::class, 'logout'])->name('logout');
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+
+
+Route::get('/login', [usercontroller::class, 'login'])->name('login');
+
+
+
+Route::get('/detailprod/{id}', [produitcontroller::class, 'detailprod'])->name('detailprod');
+
+
+Route::get('/signin', [usercontroller::class, 'signin'])->name('signin');
+
+Route::post('/createuser', [usercontroller::class, 'createuser'])->name('createuser');
+
+Route::post('/loginuser', [usercontroller::class, 'loginuser'])->name('loginuser');
+
+
+Route::get('/acceuill', function () { return view('acceuill');})->name('acceuill')->middleware("auth");
+
+Route::get('/guest', function () { return view('guestcontain');})->name('guestmain');
+
+Route::get('/cardshopping',[produitcontroller::class, 'cartaff']  )->name('cartshopping');
+Route::get('/payer', function () { return view('payement');});
+
+
+
+Route::get('/maincontain', [produitcontroller::class, 'ListeP'])->name('ListeP');
+Route::get('/', [produitcontroller::class, 'ListeP'])->name('ListeP');
+
+Route::get('/addtocard/{id}', [produitcontroller::class, 'addtocard'])->name('addtocard');
+Route::get('/addtocard1/{id}', [produitcontroller::class, 'addtocard1'])->name('addtocard1');
+Route::get('/minusfromcard/{id}', [produitcontroller::class, 'minusfromcard'])->name('addtocard');
+Route::get('/produitcate/{id}', [produitcontroller::class, 'produitcate'])->name('produitcate');
+
+Route::post('/addtocart2', [produitcontroller::class, 'addtocart2'])->name('addtocart2');
+
+Route::post('/ajoutcommandenv', [produitcontroller::class, 'ajoutcommandenv'])->name('ajoutcommandenv');
+
+Route::get('/suprimerprodcard/{id}', [produitcontroller::class, 'suprprodcard'])->name('suprprodcard');
+
+
+Route::get('/listep', [produitcontroller::class, 'Listep2'])->name('listep2');
+Route::get('/tableInfoProduit', [produitcontroller::class, 'tableinfo'])->name('tableInfoProduit');
+Route::post('/update-cart', [produitcontroller::class, 'update']);
+Route::get('/suprcart', [produitcontroller::class, 'suprcart'])->name('suprcart');
+
+
+Route::get('/header-data', [produitcontroller::class, 'index']);
+Route::get('/cartupdate', [produitcontroller::class, 'cartupdate']);
+
+
+Route::post('/listuser', [produitcontroller::class, 'listuser'])->name('listuser');
+Route::get('/test', function () {
+    $produits = Produit::with(['Caracteristique', 'Categorie', 'Images'])->get();
+
+        // Passer les options à la vue
+        return view('test', ['produits' => $produits]);
+})->name('test');
+
+Route::get('/finaliser', function () {
+    $villes = Localisation::all();
+    $produits=session()->get('cart', []);
+    $myArray = session()->get('myArray', []);
+    $souscategories1 = Categorie::orderBy('created_at', 'desc') 
+    ->get();
+    $souscategories = Categorie::orderBy('created_at', 'desc')
+    ->limit(5)
+    ->get(); 
+    $categories23 = Categorie::orderBy('created_at', 'desc') 
+    ->limit(10)
+    ->get();
+        // Passer les options à la vue
+        return view('payement', ['villes' => $villes,'produits' => $produits,'categories23'=>$categories23,'souscategories1'=>$souscategories1,'souscategories'=>$souscategories]);
+})->name('final');
+
+Route::post('/options', [usercontroller::class, 'getoptions'])->name('options');
+Route::get('/achat', function () {
+
+        // Passer les options à la vue
+        return view('Achat.Achat');
+});
+
+Route::get('/formachat', [achatcontroller::class, 'formachat'])->name('formachat');
+Route::get('/ajoutlivraison', [achatcontroller::class, 'ajoutlivraison'])->name('ajoutlivraison');
+Route::get('/listeachat', [achatcontroller::class, 'listeachat'])->name('listeachat');
+Route::get('/listenotif', [notificationcontroller::class, 'liste'])->name('listenotif');
+Route::post('/lirenotif', [notificationcontroller::class, 'lirenotif'])->name('lirenotif');
+Route::post('/traiternotif', [notificationcontroller::class, 'traiternotif'])->name('traiternotif');
+Route::get('/listecom', [notificationcontroller::class, 'listecom'])->name('listecom');
+
+
+Route::get('/achatsecre', [achatcontroller::class, 'achatsecre'])->name('achatsecre');
+Route::get('/ventesecre', [achatcontroller::class, 'ventesecre'])->name('ventesecre');
+
+Route::post('/formachat2', [achatcontroller::class, 'Formachat2'])->name('Formachat2');
+Route::post('/formachatsecre', [achatcontroller::class, 'Formachatsecre'])->name('Formachatsecre');
+Route::post('/formventesecre', [achatcontroller::class, 'Formventesecre'])->name('Formventesecre');
+
+Route::get('/listepublicite',[produitcontroller::class, 'ListePublicite'])->name('listepublicite');
+Route::get('/formpublicite',[produitcontroller::class, 'formpublicite'])->name('formpublicite');
+Route::post('/addpublicite', [produitcontroller::class, 'addpub'])->name('addpublicite');
+Route::get('/Supprimerpublicite/{id}',[produitcontroller::class, 'Supprimerpub'])->name('Supprimerpublicite');
+
+
+
+
+
+<!-- HEADER........................................... -->
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Exemple</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+    </script>
+    <!-- Styles -->
+
+    <style>
+        .header {
+            background-color: #ca8f30;
+            /* Couleur principale */
+            color: black;
+            padding: 10px 0;
+
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header .search-bar {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .header .search-bar input {
+            border-radius: 50px 0 0 50px;
+            border: none;
+            padding: 10px;
+        }
+
+        .header .search-bar button {
+            border-radius: 0 50px 50px 0;
+            border: none;
+        }
+
+        .header .navbar-brand {
+            font-weight: bold;
+        }
+
+        .header .icon-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: black;
+            border: none;
+            background: transparent;
+            padding: 10px;
+        }
+
+        .header .icon-link i {
+            font-size: 1.5rem;
+            /* Taille de l'icône */
+            margin-bottom: 5px;
+        }
+
+        .header .right-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header .secondary-menu {
+            background-color: white;
+            /* Couleur secondaire */
+            color: black;
+            padding: 10px 0;
+        }
+
+        .header .secondary-menu input[type="button"] {
+            background-color: transparent;
+            border: none;
+            color: black;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border-radius: 50px;
+        }
+
+        .header .secondary-menu input[type="button"].active {
+            background-color: #ca8f30;
+            /* Couleur de fond lorsqu'on clique */
+            color: white;
+        }
+
+        .header .secondary-menu input[type="button"]:focus {
+            outline: none;
+        }
+
+        /* Styles pour la barre latérale */
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            background-color: #fff;
+            color: #000;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 1.25em;
+            color: #000;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #d9d9e1;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+            color: #ca8f30;
+        }
+
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: white;
+            color: black;
+            padding: 10px 15px;
+            border: none;
+        }
+
+        .openbtn.active {
+            background-color: #ca8f30;
+            color: white;
+        }
+
+        .text-decoration-none {
+            text-decoration: none;
+        }
+
+        .custom-h1 {
+            font-size: 2rem;
+            /* Taille du texte */
+            color: #fff;
+            /* Couleur du texte */
+        }
+
+        /* Sidebar container */
+
+        .menu-item {
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+
+        .menu-item:hover {
+            background-color: #ca8f30;
+            cursor: pointer;
+        }
+
+        /* Submenu styling */
+        .submenus {
+            position: relative;
+        }
+
+        .submenu {
+            display: none;
+            position: absolute;
+            left: 250px;
+            /* Align next to the sidebar */
+            top: 0;
+            width: 300px;
+            background-color:#ca8f30;
+            color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .submenu.show {
+            display: block;
+        }
+
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            box-sizing: border-box;
+            /* Ensure consistent box-sizing */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <header class="header ">
+        <div class="container-fluid  d-none d-md-block py-3">
+            <div class="justify-content-between align-items-center ">
+                {{-- <a class="navbar-brand" href="#"> --}}
+                <div class="row ">
+                    <div class="col-12 col-md-2 mb-3">
+
+                        <a href="/maincontain" class="text-decoration-none">
+                            <h1 class="m-0 custom-h1"><span class="text-white font-weight-bold border px-3 mr-1">2N
+                                    SHOP</span></h1>
+                        </a>
+                    </div>
+
+                    <div class="col-12 col-md-7  mb-3">
+
+                        <form class="d-flex search-bar mx-auto">
+                            &ensp;&ensp;<input class="form-control" type="search"
+                                placeholder="Qu'est-ce qui vous ferait plaisir ?" aria-label="Search">
+                            <button class="btn btn-danger" type="submit"><i class="bi bi-search "></i></button>
+                        </form>
+                    </div>
+
+                    <!-- Header des grand écrans -->
+                    <div class="col-12 col-md-3  ">
+                        <div class="col-12 col-md-3  ">
+                            @guest
+
+                                <div class="right-menu">
+                                    <a href="{{ route('login') }}" class="icon-link"
+                                        style="all: none; text-decoration: none;">
+                                        <i class="bi bi-person"></i>
+                                        Connecter
+                                    </a>
+
+
+                                    <a href="{{ route('signin') }}" class="icon-link ms-4" style="text-decoration: none;">
+                                        <i class="bi bi-person"></i>
+                                        S'inscrire
+                                    </a>
+
+                                    <div class="col-lg-1 col-2 text-right">
+                                        <a href="/cardshopping" class="btn  position-relative"
+                                            style="text-decoration: none; ">
+                                            <i class="fas fa-shopping-cart" style="color:white ; font-size: 1.5rem;"></i>
+                                            <span
+                                                id="nouv"class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                                {{ count(session()->get('cart', [])) }}
+                                            </span>
+                                        </a>
+                                    </div>
+
+
+                                </div>
+                            @endguest
+
+
+
+                            @Auth
+                                <div class="right-menu d-flex ">
+                                    <a href="
+                    @if (Auth::user()->statut == 'admin') {{ route('admin') }} 
+                        @elseif (Auth::user()->statut == 'secretaire')
+                            {{ route('secretaire') }} @endif
+                "
+                                        class="icon-link" style="text-decoration: none;">
+                                        <i class="fa fa-user" style="color:white; font-size: 1.5rem;"></i>
+                                        {{ \Illuminate\Support\Facades\Auth::user()->name }}
+
+                                    </a>
+
+                                    <div class="col-lg-1 col-1 text-right">
+                                        <a href="/cardshopping" class="btn position-relative"
+                                            style="text-decoration: none;">
+                                            <i class="fas fa-shopping-cart" style="color:white; font-size: 1.5rem;"></i>
+                                            <span id="nouv"
+                                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                                {{ count(session()->get('cart', [])) }}
+                                            </span>
+                                        </a>
+                                    </div>
+
+                                    <div class="col-lg-1 col-1 text-right  ms-5">
+                                        <form action="{{ route('logout') }}" method="post">
+                                            @method('delete')
+                                            @csrf
+                                            <a href="{{ route('logout') }}" style="text-decoration: none;"> <i
+                                                    class="fas fa-sign-out-alt"
+                                                    style="color:white; font-size: 1.5rem;"></i><span class=" d-lg-block">
+                                                    <button type="submit" style="all: unset;"> <i style="color:white">
+                                                            Logout</i></button> </span> </a>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            @endAuth
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center mt-3 secondary-menu">
+                <nav class="nav">
+                    <button class="openbtn" id="rayonsButton" onclick="toggleSidebar()"><i class="bi bi-list"></i> Tous
+                        nos rayons</button>
+                    <button class="openbtn"><a href="/maincontain"><input type="button" value="Accueil" class="btn"
+                                onclick="activateMenuItem(this)"></a></button>
+
+                    @if (@isset($souscategories))
+
+
+                        @foreach ($souscategories as $souscat)
+                            <button class="openbtn"><a href="/produitcate/{{ $souscat->id }}"><input type="button"
+                                        value="{{ $souscat->nomCat }}" class="btn" onclick="activateMenuItem(this)"
+                                        style="size: 30px;"></a></button>
+                        @endforeach
+                    @endif
+                </nav>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Header des petits écrans -->
+        <div class="container d-block d-md-none">
+            <div class="d-flex justify-content-between align-items-center" style="height: 100px">
+                {{-- <a class="navbar-brand" href="#"> --}}
+                <div class="row">
+                    <div class="col-12 mt-2">
+                        <form class="d-flex search-bar mx-auto">
+                            &ensp;&ensp;<input class="form-control" type="search"
+                                placeholder="Qu'est-ce qui vous ferait plaisir ?" aria-label="Search">
+                            <button class="btn btn-danger" type="submit"><i class="bi bi-search"></i></button>
+                        </form>
+                    </div>
+                    <div class="col-2 mt-3">
+                        <a href="/maincontain" style="text-decoration: none;">
+                            <h1 class="m-0 custom-h1" style="font-size: 2rem;"><span
+                                    class="text-white font-weight-bold border px-1 mr-1">2N</span></h1>
+                        </a>
+                    </div>
+
+
+
+
+                    <div class="col-10">
+                        @guest
+
+                            <div class="right-menu">
+                                <a href="/maincontain" class="icon-link" style="text-decoration: none; font-size:9px;">
+                                    <i class="bi bi-house"></i>
+                                    Accueil
+                                </a>
+                                <a href="{{ route('login') }}" class="icon-link"
+                                    style="text-decoration: none; font-size:9px;">
+                                    <i class="bi bi-person"></i>
+                                    Connecter
+                                </a>
+                                <a href="{{ route('signin') }}" class="icon-link "
+                                    style="text-decoration: none; font-size:9px;">
+                                    <i class="bi bi-person "></i>
+                                    S'inscrire
+                                </a>
+
+                                <div class="col-lg-1 col-2 text-right ms-n3 position-relative" style="left: -30px;">
+                                    <a href="/cardshopping" class="btn  position-relative"
+                                        style="text-decoration: none; ">
+                                        <i class="fas fa-shopping-cart ms-n3"
+                                            style="color:white ; font-size: 1.5rem;"></i>
+                                        <span
+                                            id= "nouv"class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            {{ count(session()->get('cart', [])) }}
+                                        </span>
+                                    </a>
+                                </div>
+
+
+                            </div>
+                        @endguest
+
+
+
+                        @Auth
+                            <div class="right-menu ">
+
+
+                                <div></div>
+                                <a href="" class="icon-link">
+                                    <i class="fa fa-user"></i>
+                                    {{ \Illuminate\Support\Facades\Auth::user()->name }} </a>
+
+
+
+                                <div></div>
+                                <a href="/cardshopping" class="btn  position-relative" style="text-decoration: none;">
+                                    <i class="fas fa-shopping-cart" style="color:white; font-size: 2rem;"></i>
+                                    <span id="nouv"
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ count(session()->get('cart', [])) }}
+                                    </span>
+                                </a>
+
+
+                                <div></div>
+                                <div></div>
+                                <form action="{{ route('logout') }}" method="post">
+                                    @method('delete')
+                                    @csrf
+                                    <a href="#" style="text-decoration: none;"> <i class="fas fa-sign-out-alt"
+                                            style="color:white; font-size: 1.7rem;"></i><span class=" d-lg-block"> <button
+                                                type="submit" style="all: unset;"> <i style="color:white">
+                                                    LogOut</i></button> </span> </a>
+                                </form>
+
+
+
+
+                            </div>
+                        @endAuth
+                    </div>
+
+                </div>
+            </div>
+            <div class="d-none d-lg-none d-md-noned-flex justify-content-center mt-3 secondary-menu">
+                <!-- faire disparaître le deuxième menu sur écran téléphone -->
+                <nav class="nav">
+                    <button class="openbtn" id="rayonsButton" onclick="toggleSidebar()"><i class="bi bi-list"></i>
+                        Tous nos rayons</button>
+                    <a href="/maincontain"><input type="button" value="Accueil" class="btn"
+                            onclick="activateMenuItem(this)"></a>
+
+                    {{-- @if (@isset($categories))
+                    
+               
+                @foreach ($categories as $cat)
+                <a href="/produitcate/{{$cat->id}}"><input type="button" value="{{$cat->nomCat}}" class="btn" onclick="activateMenuItem(this)"></a>
+                @endforeach
+                @endif --}}
+                </nav>
+            </div>
+        </div>
+    </header>
+
+
+
+    <!-- Sidebar -->
+    <div id="mySidebar" class="sidebar">
+        <a href="#" style="background-color: #14363b;color:white" class="w-100 ">&ensp;Nos Categories</a>
+        <a href="javascript:void(0)" class="closebtn  " onclick="closeNav()">×</a>
+        @foreach ($souscategories1 as $category)
+            <a href="/produitcate/{{ $category->id }}" class="menu-item" data-target="submenu{{ $category->id }}">
+                <i class="bi bi-camera-video"></i>&ensp;{{ $category->nomCat }}
+            </a>
+        @endforeach
+        <a href="#"><i class="bi bi-camera-video"></i>&ensp;Promo</a>
+        <a href="#"><i class="bi bi-camera-video"></i>&ensp;Câble et conducteur</a>
+        <a href="#"><i class="bi bi-lightbulb"></i> &ensp;Luminaire</a>
+        {{-- <a href="#"><i class="bi bi-tools"></i>&ensp;Outillage</a>
+    <a href="#"><i class="bi bi-camera-video"></i>&ensp;Automatisme-Gestion de l'energie</a>
+    <a href="#"><i class="bi bi-camera-video"></i>&ensp;Ascenseur-Monte-Charge</a>
+    <a href="#"><i class="bi bi-camera-video"></i>&ensp;Vidéo surveillance</a>
+    <a href="#"><i class="bi bi-camera-video"></i>&ensp;Carrelage</a> --}}
+        <a href="#"><i class="bi bi-camera-video"></i>&ensp;Appareil électroménager</a>
+        <a href="#"><i class="bi bi-laptop"></i>&ensp;Matériels informatique</a>
+        <a href="#"><i class="bi bi-phone"></i>&ensp;Téléphonie</a>
+
+    </div>
+    <!-- <div class="submenus">
+    @foreach ($souscategories as $category)
+<div id="submenu{{ $category->id }}" class="submenu">
+        <p>Details about {{ $category->nomCat }} category.</p>
+    </div>
+@endforeach
+</div> -->
+    <script>
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                const target = this.getAttribute('data-target');
+                document.querySelectorAll('.submenu').forEach(submenu => {
+                    submenu.classList.remove('show');
+                });
+                document.getElementById(target).classList.add('show');
+            });
+
+            item.addEventListener('mouseleave', function() {
+                const target = this.getAttribute('data-target');
+                setTimeout(() => {
+                    document.getElementById(target).classList.remove('show');
+                }, 300); // Optional delay for smoother UX
+            });
+        });
+    </script>
+    <script>
+        function activateMenuItem(element) {
+            // Désactiver tous les autres éléments de menu
+            let items = document.querySelectorAll(
+                '.secondary-menu input[type="button"], .right-menu .icon-link, .secondary-menu .openbtn');
+            items.forEach(item => item.classList.remove('active'));
+
+            // Activer l'élément cliqué
+            element.classList.add('active');
+
+            // Fermer la barre latérale si elle est ouverte
+            closeNav();
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById("mySidebar");
+            const button = document.getElementById("rayonsButton");
+
+            // Désactiver tous les autres boutons du menu
+            let items = document.querySelectorAll(
+                '.secondary-menu input[type="button"], .right-menu .icon-link, .secondary-menu .openbtn');
+            items.forEach(item => item.classList.remove('active'));
+
+            if (sidebar.style.width === "300px") {
+                sidebar.style.width = "0";
+                button.classList.remove('active');
+            } else {
+                sidebar.style.width = "300px";
+                button.classList.add('active');
+            }
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("rayonsButton").classList.remove('active');
+        }
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+
+
+</body>
+
+</html>
